@@ -25,11 +25,13 @@ import { CompressMessage, ExecuteMessage, RunStatus, WorkerMessage, WorkerProgre
 const WASM_URL = './js.wasm';
 const WASMER_SDK = './diswasmer_js_bg.wasm';
 
-const dictionaryText = "JSON.stringify(.parse( RegExp(.input(.lastMatch(.lastParen(.leftContext(.rightContext(.compile(.exec(.test(.toString(.replace(.match(.matchAll(;\n                                // `;\n\n    \n\nconsole.log(\n\nconst \n\nlet undefined \n\nvar \n\nif (\n\nfor (\n\nwhile (\n\nswitch (    case of in instanceof new true false do {\n    this. break;\n return    } else {\n        } or {\n        ) {\n        }\n);\n\n`;\n\n';\n\n\";\n\n/* */\n\n// = + - * / || && += -= *= ++;\n --;\n == === !== != >= <= < > ?? & | ~ ^ << >> >>> ... \nimport qre from 'qre';\n\nimport qre from \"qre\";\n\n = qre`.indices`.global`.ignoreCase`.legacy`.unicode`.sticky`.cache`optional begin-of-text; end-of-text; begin-of-line; end-of-line; word-boundary; repeat at-least-1 at-most-times -to- not new-line; line-feed; carriage-return; tabulation; null; space; any; digit; white-space; whitespace; word-character; line-terminator; prop< property< lookahead look-ahead lookbehind look-behind group \"${}\" '${}' ${ ";
+const dictionaryText1 = "JSON.stringify(.parse( RegExp(.input(.lastMatch(.lastParen(.leftContext(.rightContext(.compile(.exec(.test(.toString(.replace(.match(.matchAll(;\n                                // `;\n\n    \n\nconsole.log(\n\nconst \n\nlet undefined \n\nvar \n\nif (\n\nfor (\n\nwhile (\n\nswitch (    case of in instanceof new true false do {\n    this. break;\n return    } else {\n        } or {\n        ) {\n        }\n);\n\n`;\n\n';\n\n\";\n\n/* */\n\n// = + - * / || && += -= *= ++;\n --;\n == === !== != >= <= < > ?? & | ~ ^ << >> >>> ... \nimport cre from 'con-reg-exp';\n\nimport cre from \"con-reg-exp\";\n\n = cre`.indices`.global`.ignoreCase`.legacy`.unicode`.sticky`.cache`optional begin-of-text; end-of-text; begin-of-line; end-of-line; word-boundary; repeat at-least-1 at-most-times -to- not new-line; line-feed; carriage-return; tabulation; null; space; any; digit; white-space; whitespace; word-character; line-terminator; prop< property< lookahead look-ahead lookbehind look-behind group \"${}\" '${}' ${ ";
+const dictionaryText2 = "JSON.stringify(.parse( RegExp(.input(.lastMatch(.lastParen(.leftContext(.rightContext(.compile(.exec(.test(.toString(.replace(.match(.matchAll(;\n                                // `;\n\n    \n\nconsole.log(\n\nconst \n\nlet undefined \n\nvar \n\nif (\n\nfor (\n\nwhile (\n\nswitch (    case of in instanceof new true false do {\n    this. break;\n return    } else {\n        } or {\n        ) {\n        }\n);\n\n`;\n\n';\n\n\";\n\n/* */\n\n// = + - * / || && += -= *= ++;\n --;\n == === !== != >= <= < > ?? & | ~ ^ << >> >>> ... \nimport qre from 'qre';\n\nimport qre from \"qre\";\n\n = qre`.indices`.global`.ignoreCase`.legacy`.unicode`.sticky`.cache`optional begin-of-text; end-of-text; begin-of-line; end-of-line; word-boundary; repeat at-least-1 at-most-times -to- not new-line; line-feed; carriage-return; tabulation; null; space; any; digit; white-space; whitespace; word-character; line-terminator; prop< property< lookahead look-ahead lookbehind look-behind group \"${}\" '${}' ${ ";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
-const dictionary = encoder.encode(JSON.stringify(dictionaryText));
+const dictionary1 = encoder.encode(JSON.stringify(dictionaryText1));
+const dictionary2 = encoder.encode(JSON.stringify(dictionaryText2));
 
 onmessage = async (event) => {
     let message = event.data as WorkerMessage;
@@ -65,7 +67,7 @@ function progress(res: WorkerProgress) {
 }
 
 function compressMessage(message: CompressMessage) {
-    let output = deflateSync(message.input, { level: 9, dictionary, mem: 7 });
+    let output = deflateSync(message.input, { level: 9, dictionary: message.version === 1 ? dictionary1 : dictionary2, mem: 7 });
     console.log('Compress', message.input.length, output.length);
     response({
         type: 'compress',
@@ -75,7 +77,7 @@ function compressMessage(message: CompressMessage) {
 }
 
 function decompressMessage(message: CompressMessage) {
-    let output = inflateSync(message.input, { dictionary });
+    let output = inflateSync(message.input, { dictionary: message.version === 1 ? dictionary1 : dictionary2 });
     console.log('Decompress', message.input.length, output.length);
     response({
         type: 'decompress',

@@ -385,9 +385,9 @@ async function updateAddress(stateParam?: State) {
         let response = await sendWithResponse<CompressResponse>({
             type: 'compress',
             input: data,
-            version: 1,
+            version: 2,
         });
-        let hash = '#1' + await toBase64(response.output);
+        let hash = '#2' + await toBase64(response.output);
         currentAddressHash = hash;
         history.replaceState(null, '', hash);
     } catch (err) {
@@ -525,7 +525,7 @@ async function readFromHash(): Promise<void> {
         currentAddressHash = hash;
         if (hash.length < 3) return;
         let version = hash.substring(1, 2);
-        if (version !== '1') throw new Error('Invalid format.');
+        if (version !== '1' && version !== '2') throw new Error('Invalid format.');
         let data = await fromBase64(hash.substring(2));
         let response = await sendWithResponse<CompressResponse>({
             type: 'decompress',
@@ -533,6 +533,12 @@ async function readFromHash(): Promise<void> {
             version: parseInt(version),
         });
         let textData = decoder.decode(response.output);
+        if (version === '1') {
+            textData = textData
+                .replace(/cre/g, 'qre')
+                .replace(/con-reg-exp/g, 'qre')
+                .replace(/Convenient/g, 'Quick');
+        }
         let index = textData.indexOf('\0');
         openFileWithContent(textData.substring(0, index), textData.substring(index + 1));
     } catch (err) {
