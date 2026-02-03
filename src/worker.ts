@@ -25,7 +25,7 @@ import { CompressMessage, ExecuteMessage, RunStatus, WorkerMessage, WorkerProgre
 const WASM_URL = './js.wasm';
 const WASMER_SDK = './diswasmer_js_bg.wasm';
 
-const dictionaryText = "JSON.stringify(.parse( RegExp(.input(.lastMatch(.lastParen(.leftContext(.rightContext(.compile(.exec(.test(.toString(.replace(.match(.matchAll(;\n                                // `;\n\n    \n\nconsole.log(\n\nconst \n\nlet undefined \n\nvar \n\nif (\n\nfor (\n\nwhile (\n\nswitch (    case of in instanceof new true false do {\n    this. break;\n return    } else {\n        } or {\n        ) {\n        }\n);\n\n`;\n\n';\n\n\";\n\n/* */\n\n// = + - * / || && += -= *= ++;\n --;\n == === !== != >= <= < > ?? & | ~ ^ << >> >>> ... \nimport cre from 'con-reg-exp';\n\nimport cre from \"con-reg-exp\";\n\n = cre`.indices`.global`.ignoreCase`.legacy`.unicode`.sticky`.cache`optional begin-of-text; end-of-text; begin-of-line; end-of-line; word-boundary; repeat at-least-1 at-most-times -to- not new-line; line-feed; carriage-return; tabulation; null; space; any; digit; white-space; whitespace; word-character; line-terminator; prop< property< lookahead look-ahead lookbehind look-behind group \"${}\" '${}' ${ ";
+const dictionaryText = "JSON.stringify(.parse( RegExp(.input(.lastMatch(.lastParen(.leftContext(.rightContext(.compile(.exec(.test(.toString(.replace(.match(.matchAll(;\n                                // `;\n\n    \n\nconsole.log(\n\nconst \n\nlet undefined \n\nvar \n\nif (\n\nfor (\n\nwhile (\n\nswitch (    case of in instanceof new true false do {\n    this. break;\n return    } else {\n        } or {\n        ) {\n        }\n);\n\n`;\n\n';\n\n\";\n\n/* */\n\n// = + - * / || && += -= *= ++;\n --;\n == === !== != >= <= < > ?? & | ~ ^ << >> >>> ... \nimport qre from 'qre';\n\nimport qre from \"qre\";\n\n = qre`.indices`.global`.ignoreCase`.legacy`.unicode`.sticky`.cache`optional begin-of-text; end-of-text; begin-of-line; end-of-line; word-boundary; repeat at-least-1 at-most-times -to- not new-line; line-feed; carriage-return; tabulation; null; space; any; digit; white-space; whitespace; word-character; line-terminator; prop< property< lookahead look-ahead lookbehind look-behind group \"${}\" '${}' ${ ";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -170,7 +170,7 @@ async function executeMessage(message: ExecuteMessage) {
             status: RunStatus.DOWNLOADING,
         });
         let jsModulePromise = WebAssembly.compileStreaming(fetch(WASM_URL));
-        let creSourceRequestPromise = fetch('./con-reg-exp.mjs');
+        let creSourceRequestPromise = fetch('./qre.mjs');
         let stubSourceRequestPromise = fetch('./console-stub.mjs');
         let creSourcePromise = (await creSourceRequestPromise).text();
         let stubSourcePromise = (await stubSourceRequestPromise).text();
@@ -252,8 +252,8 @@ async function executeMessage(message: ExecuteMessage) {
                     printErr("    " + e.stack.replace(/(\\\\r?\\\\n)/g, "$1    "));
                 }
             }\`, '/_startup.mjs');
-        creMod = getModule(${JSON.stringify(creSource)}, '/con-reg-exp.mjs');
-        registerModule('con-reg-exp', creMod);
+        creMod = getModule(${JSON.stringify(creSource)}, '/qre.mjs');
+        registerModule('qre', creMod);
         moduleLink(mainMod);
         moduleEvaluate(mainMod);
     `);

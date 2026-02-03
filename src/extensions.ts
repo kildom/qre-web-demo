@@ -1,6 +1,6 @@
 
 import * as monaco from 'monaco-editor';
-import { cre } from 'con-reg-exp';
+import { qre } from 'qre';
 
 enum TokenType {
     NAMESPACE,
@@ -120,17 +120,17 @@ class TokensBuilder {
 }
 
 interface CodeRegExpGroups {
-    cre?: string;
+    qre?: string;
     comment?: string;
     template?: string;
 }
 
-const codeRegExpProto = cre.global`
+const codeRegExpProto = qre.global`
     //! interface CodeRegExpGroups
     {
         // Start of CRE
         word-boundary;
-        cre: "cre";
+        qre: "qre";
         flags: repeat {
             ".";
             at-least-1 [a-zA-Z];
@@ -167,11 +167,11 @@ const codeRegExpProto = cre.global`
     }
 `;
 
-const commentRegExpProto = cre.global`
+const commentRegExpProto = qre.global`
     "*/"
 `;
 
-const templateRegExpProto = cre.global`
+const templateRegExpProto = qre.global`
     lazy-repeat (("\\", any) or any);
     "\`";
 `;
@@ -190,7 +190,7 @@ interface CRERegExpGroups {
     interpolation?: string;
 }
 
-const creRegExpProto = cre.global`
+const creRegExpProto = qre.global`
     //! interface CRERegExpGroups
     // const tokenRegExpBase = /(?<creEnd>(?<!\\)\`)|\s*(?:(?<begin>[{(])|(?<end>[)}])|(?<separator>[,;])|(?<label>[a-zA-Z_][a-zA-Z0-9_]*):|(?<keyword>[a-zA-Z0-9\u2011\\-]+)|(?<literal>(?<_literalQuote>["'])(?:\\.|.)*?\k<_literalQuote>)|<(?<identifier>.*?)>|\[(?<complement>\^)?(?<characterClass>(?:\\.|.)*?)\]|(?<prefix>\`[A-Z]{3,})(?<index>[0-9]+)\}|(?<comment1>\/\*.*?\*\/)|(?<interpolation>\$\{)|(?<comment2>\/\/.*?)(?=[\r\n\u2028\u2029]|$))\s*/sy;
     {
@@ -235,7 +235,7 @@ const creRegExpProto = cre.global`
     }
 `;
 
-const interpolationRegExpProto = cre.global`
+const interpolationRegExpProto = qre.global`
     "}"
 `;
 
@@ -246,7 +246,7 @@ interface KeywordsRegExpGroups {
     assertion?: string;
 }
 
-const keywordsRegExp = cre.ignoreCase`
+const keywordsRegExp = qre.ignoreCase`
     //! interface KeywordsRegExpGroups
     begin-of-text;
     {
@@ -284,7 +284,7 @@ const keywordsRegExp = cre.ignoreCase`
             or "lookbehind";
         }
     }
-    // TODO: https://kildom.github.io/con-reg-exp/docs.html#string-literal-alias
+    // TODO: https://kildom.github.io/qre/docs.html#string-literal-alias
     end-of-text;
 `;
 
@@ -377,7 +377,7 @@ class CRESemanticTokensProvider implements monaco.languages.DocumentSemanticToke
             return ParsingState.COMMENT;
         } else if (groups.template) {
             return ParsingState.TEMPLATE;
-        } else if (groups.cre) {
+        } else if (groups.qre) {
             return ParsingState.CRE;
         } else {
             return ParsingState.CODE;

@@ -57,8 +57,8 @@ build({
             recursive: true,
         }),
         copyStaticFiles({
-            src: 'node_modules/con-reg-exp/dist/esm/con-reg-exp.mjs',
-            dest: 'dist/con-reg-exp.mjs',
+            src: 'node_modules/qre/dist/esm/qre.mjs',
+            dest: 'dist/qre.mjs',
         })
     ],
 }, true, 'temp/web-main.json');

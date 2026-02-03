@@ -5,7 +5,7 @@ import {LICENSES} from './additional-licenses';
 
 const DEBUG = false;
 
-const thisModuleName = 'cre-web-demo';
+const thisModuleName = 'qre-web-demo';
 
 interface Metafile {
     inputs: {

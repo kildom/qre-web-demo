@@ -25,7 +25,7 @@ jobs:
       - name: Build web contents
         run: |
           npm ci
-          npm update con-reg-exp
+          npm update qre
           npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

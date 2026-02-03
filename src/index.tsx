@@ -7,7 +7,7 @@ import React, { useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import * as db from './db.js';
 import { CompressMessage, CompressResponse, ExecuteProgress, ExecuteResponse, RunStatus, WorkerMessage, WorkerProgress, WorkerResponse } from './shared.js';
-import { cre } from 'con-reg-exp';
+import { qre } from 'qre';
 
 
 import 'normalize.css/normalize.css';
@@ -256,10 +256,10 @@ function renameDone() {
 }
 
 const NEW_FILE_TEMPLATE = `
-// Import Convenient Regular Expressions
-import cre from "con-reg-exp";
+// Import Quick Regular Expressions
+import qre from "qre";
 
-const yourExpression = cre\`\`;
+const yourExpression = qre\`\`;
 `;
 
 function newFile(ext: string) {
@@ -603,7 +603,7 @@ function App() {
             <div className="bottons">
                 <Navbar>
                     <Navbar.Group align={Alignment.LEFT}>
-                        <Navbar.Heading><span style={{ fontSize: '85%' }}><a href="https://kildom.github.io/con-reg-exp/" target="_blank">Convenient Regular Expressions</a><br />Web Demo</span></Navbar.Heading>
+                        <Navbar.Heading><span style={{ fontSize: '85%' }}><a href="https://kildom.github.io/qre/" target="_blank">Quick Regular Expressions</a><br />Web Demo</span></Navbar.Heading>
                         <Navbar.Divider />
                         <Popover placement="bottom" content={
                             <Menu large={true}>
@@ -668,16 +668,16 @@ function App() {
                         ))}
                 </Tabs>
             </div>
-            <Dialog title="About Convenient Regular Expressions" icon="help" isOpen={state.showDialog === DialogType.ABOUT} onClose={() => setState({ ...state, showDialog: DialogType.NONE })}>
+            <Dialog title="About Quick Regular Expressions" icon="help" isOpen={state.showDialog === DialogType.ABOUT} onClose={() => setState({ ...state, showDialog: DialogType.NONE })}>
                 <DialogBody>
-                    <p>The <b><i>Convenient Regular Expressions</i></b> give a different approach to a regular expressions syntax. The main goal is to provide a syntax that is more manageable in complex regular expressions. It looks more like actual program source code with clearly visible structure, comments, and meaning.</p>
+                    <p>The <b><i>Quick Regular Expressions</i></b> give a different approach to a regular expressions syntax. The main goal is to provide a syntax that is more manageable in complex regular expressions. It looks more like actual program source code with clearly visible structure, comments, and meaning.</p>
                     <p>See the following pages to learn more:</p>
                     <ul>
-                        <li><a href="https://kildom.github.io/con-reg-exp/" target="_blank">Website</a></li>
-                        <li><a href="https://kildom.github.io/con-reg-exp/tutorial.html" target="_blank">Tutorial</a></li>
-                        <li><a href="https://kildom.github.io/con-reg-exp/docs.html" target="_blank">Documentation</a></li>
-                        <li><a href="https://kildom.github.io/con-reg-exp/cheat-sheet.html" target="_blank">Cheat Sheet</a></li>
-                        <li><a href="https://github.com/kildom/con-reg-exp/" target="_blank">GitHub repository</a></li>
+                        <li><a href="https://kildom.github.io/qre/" target="_blank">Website</a></li>
+                        <li><a href="https://kildom.github.io/qre/tutorial.html" target="_blank">Tutorial</a></li>
+                        <li><a href="https://kildom.github.io/qre/docs.html" target="_blank">Documentation</a></li>
+                        <li><a href="https://kildom.github.io/qre/cheat-sheet.html" target="_blank">Cheat Sheet</a></li>
+                        <li><a href="https://github.com/kildom/qre/" target="_blank">GitHub repository</a></li>
                     </ul>
                 </DialogBody>
                 <DialogFooter actions={<>
@@ -688,7 +688,7 @@ function App() {
             </Dialog>
             <Dialog title="License Information" icon="info-sign" isOpen={state.showDialog === DialogType.LICENSE} onClose={() => setState({ ...state, showDialog: DialogType.NONE })} style={{maxWidth: 'calc(100vw - 40px)', width: '900px'}}>
                 <DialogBody>
-                    <p>The <b><i>Convenient Regular Expressions</i></b> are published under the MIT license, see details below.</p>
+                    <p>The <b><i>Quick Regular Expressions</i></b> are published under the MIT license, see details below.</p>
                     <p>This site is additionally using a software that is covered by the following licenses:</p>
                     <iframe src="license.html" style={{maxHeight: 'calc(100vh - 400px)', width: '100%', height: '600px', border: '1px solid #777' }}></iframe>
                 </DialogBody>
@@ -782,7 +782,7 @@ async function createDatabaseStructure(database: db.Database) {
 
 async function openStorage() {
     const INDEXED_DB_VERSION = 18;
-    database = await db.open('cre-web-demo-storage', INDEXED_DB_VERSION, createDatabaseStructure, 1000);
+    database = await db.open('qre-web-demo-storage', INDEXED_DB_VERSION, createDatabaseStructure, 1000);
     await using transaction = database.transaction('files', 'readonly');
     let files = transaction.objectStore<DBEntry>('files');
     let list = await files.getAll();
@@ -1024,7 +1024,7 @@ function escapeHTML(str: string): string {
 }
 
 function showOutput(stdio: string[], fileName?: string) {
-    let fileRegExp: RegExp | undefined = fileName ? cre.global`
+    let fileRegExp: RegExp | undefined = fileName ? qre.global`
             "${fileName}";
             ":";
             lineNumber: at-least-1 [0-9];
